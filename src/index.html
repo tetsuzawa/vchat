@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SkyWay - Room example</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="heading">Room example</h1>
+    <p class="note">
+        Change Room mode (before join in a room):
+        <a href="#">mesh</a> / <a href="#sfu">sfu</a>
+    </p>
+    <div class="room">
+        <div>
+            <video id="js-local-stream"></video>
+            <span id="js-room-mode"></span>:
+            <input type="text" placeholder="Room Name" id="js-room-id">
+            <button id="js-join-trigger">Join</button>
+            <button id="js-leave-trigger">Leave</button>
+        </div>
+
+        <div class="remote-streams" id="js-remote-streams"></div>
+
+        <div>
+            <pre class="messages" id="js-messages"></pre>
+            <input type="text" id="js-local-text">
+            <button id="js-send-trigger">Send</button>
+        </div>
+    </div>
+    <p class="meta" id="js-meta"></p>
+</div>
+
+<form id="panner-target-list">
+</form>
+
+<table>
+    <tr>
+        <th>panningModel</th>
+        <td><select id="panmodel">
+            <option>equalpower</option>
+            <option selected>HRTF</option>
+        </select></td>
+    </tr>
+    <tr>
+        <th>PositionX</th>
+        <td><input type="range" id="posx" min="-10" max="10" step="0.1" value="0"/></td>
+        <td span id="posxval">0</td>
+    </tr>
+    <tr>
+        <th>PositionY</th>
+        <td><input type="range" id="posy" min="-10" max="10" step="0.1" value="0"/></td>
+        <td id="posyval">0</td>
+    </tr>
+    <tr>
+        <th>PositionZ</th>
+        <td><input type="range" id="posz" min="-10" max="10" step="0.1" value="-5"/></td>
+        <td id="poszval">0</td>
+    </tr>
+</table>
+<br/>
+<canvas id="cv" width="250" height="200"></canvas>
+<br/>
+<script src="//cdn.webrtc.ecl.ntt.com/skyway-4.4.0.js"></script>
+<script src="./key.js"></script>
+<script src="./script.js"></script>
+</body>
+</html>
