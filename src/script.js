@@ -30,7 +30,11 @@ const Peer = window.Peer;
 
     const localStream = await navigator.mediaDevices
         .getUserMedia({
-            audio: true,
+            audio: {
+                echoCancellation: true,
+                echoCancellationType: 'system',
+                noiseSuppression: true,
+            },
             video: true,
         })
         .catch(console.error);
@@ -90,20 +94,22 @@ const Peer = window.Peer;
             window.panners.set(stream.peerId, panner);
             console.log('kokomade stearm.peerId: ', stream.peerId);
 
+            const newRadioButtonLabel = document.createElement('label');
+            newRadioButtonLabel.innerText = stream.peerId;
+            newRadioButtonLabel.htmlFor = 'radio-button-' + stream.peerId;
+
             const newRadioButton = document.createElement('input');
-            newRadioButton.id = stream.peerId;
+            newRadioButton.id = 'radio-button-' + stream.peerId;
             newRadioButton.name = 'pannerTarget';
             newRadioButton.value = stream.peerId;
             newRadioButton.type = 'radio';
-            newRadioButton.checked=true;
+            newRadioButton.checked = true;
+            newRadioButtonLabel.appendChild(newRadioButton);
 
-            const newRadioButtonLabel = document.createElement('label');
-            newRadioButtonLabel.htmlFor = stream.peerId;
-            newRadioButtonLabel.innerText = stream.peerId;
-            newRadioButton.appendChild(newRadioButtonLabel);
 
             const pannerTargetList = document.getElementById('panner-target-list');
-            pannerTargetList.appendChild(newRadioButton);
+            pannerTargetList.appendChild(newRadioButtonLabel);
+            pannerTargetList.appendChild(document.createElement('br'))
             // ------------------------------------------------------------------------------
 
             await newVideo.play().catch(console.error);
@@ -166,8 +172,6 @@ const Peer = window.Peer;
     const canvasctx = cv.getContext('2d');
     cv.addEventListener('mousemove', Mouse);
     cv.addEventListener('mousedown', Mouse);
-    // SetupModel();
-    // SetupPos();
 
     function Draw() {
         console.log('Draw');
@@ -231,8 +235,8 @@ const Peer = window.Peer;
     function SetupPos() {
         const peerId = GetCurrentPannerTargetPeerId();
         console.log('SetupPos peerId: ', peerId);
-        if (peerId === null || peerId === undefined|| peerId === '') {
-            console.log("SetupPos no peerId found")
+        if (peerId === null || peerId === undefined || peerId === '') {
+            console.log('SetupPos no peerId found');
             return;
         }
         const panner = window.panners.get(peerId);
