@@ -87,12 +87,12 @@ const Peer = window.Peer;
             // ------------------------------------------------------------------------------
             const audioctx = new (window.AudioContext || window.webkitAudioContext)();
             const source = new MediaStreamAudioSourceNode(audioctx, {mediaStream: stream});
-            const panner = new PannerNode(audioctx, {panningModel: 'HRTF'});
+            // const panner = new PannerNode(audioctx, {panningModel: 'HRTF'});
+            const panner = audioctx.createPanner();
+            panner.panningModel = 'HRTF';
             source.connect(panner).connect(audioctx.destination);
-            // source.start();
             window.audioCtxs.set(stream.peerId, audioctx);
             window.panners.set(stream.peerId, panner);
-            console.log('kokomade stearm.peerId: ', stream.peerId);
 
             const newRadioButtonLabel = document.createElement('label');
             newRadioButtonLabel.innerText = stream.peerId;
@@ -109,7 +109,7 @@ const Peer = window.Peer;
 
             const pannerTargetList = document.getElementById('panner-target-list');
             pannerTargetList.appendChild(newRadioButtonLabel);
-            pannerTargetList.appendChild(document.createElement('br'))
+            pannerTargetList.appendChild(document.createElement('br'));
             // ------------------------------------------------------------------------------
 
             await newVideo.play().catch(console.error);
@@ -217,20 +217,10 @@ const Peer = window.Peer;
         }
     }
 
-    document.getElementById('panmodel').addEventListener('change', SetupModel);
+    // document.getElementById('panmodel').addEventListener('change', SetupModel);
     document.getElementById('posx').addEventListener('input', SetupPos);
     document.getElementById('posy').addEventListener('input', SetupPos);
     document.getElementById('posz').addEventListener('input', SetupPos);
-
-    function SetupModel() {
-        const peerId = GetCurrentPannerTargetPeerId();
-        console.log('SetupModel peerId: ');
-        if (peerId === null || peerId === undefined) {
-            return;
-        }
-        const panner = window.panners.get(peerId);
-        panner.panningModel = ['equalpower', 'HRTF'][document.getElementById('panmodel').selectedIndex];
-    }
 
     function SetupPos() {
         const peerId = GetCurrentPannerTargetPeerId();
@@ -247,6 +237,7 @@ const Peer = window.Peer;
             = document.getElementById('posy').value);
         pz = panner.positionZ.value = parseFloat(document.getElementById('poszval').innerHTML
             = document.getElementById('posz').value);
+        console.log(panner.positionX.value, panner.positionY.value, panner.positionZ.value);
         Draw();
     }
 
